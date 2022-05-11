@@ -12,8 +12,7 @@ char Cliente::opcoesMenuCliente() {
         fflush(stdin);
         switch (opcao) {
             case '1': {
-                Cliente cli = cadastrarCliente();
-//                listaClientes.push_back(cli);
+                cadastrarCliente();
                 std::cout << "Cliente Cadastrado" << std::endl;
                 system("cls");
                 MenuDefault::menuGenericOpcoes("Clientes");
@@ -52,23 +51,13 @@ char Cliente::opcoesMenuCliente() {
     }
 }
 
-Cliente Cliente::cadastrarCliente() {
-    SYSTEMTIME str_t;
-    GetSystemTime(&str_t);
+void Cliente::cadastrarCliente() {
     Cliente cliente;
     do {
         std::cout << "Digite Nome do Cliente" << std::endl;
         std::getline(std::cin, cliente.nome);
     } while (sizeof(cliente.nome) <= 3);
-//    do {
-//        std::cout << "Digite o Sexo - F ou M" << std::endl;
-//        std::cin >> cliente.sexo;
-//    } while (cliente.sexo.length() >= 2);
-//
-//    idCount++;
-
-//    return cliente;
-    return Cliente();
+    cli->escreveLinha(cliente.toSting());
 }
 
 void Cliente::visualizarCliente() {
@@ -124,5 +113,9 @@ Cliente *Cliente::getClienteById(int id) {
 
 std::string Cliente::getNomeCliente() {
     return nome;
+}
+
+std::string Cliente::toSting() {
+    return to_string(this->id) + "," + this->nome + ',' + to_string(this->valor);
 }
 
