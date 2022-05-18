@@ -2,7 +2,6 @@
 #define VIDEOLOCADORA_CLIENTE_H
 #include <iostream>
 #include <list>
-#include "FileManager.h"
 
 class Cliente{
 private:
@@ -28,5 +27,5 @@ public:
     static Cliente *getClienteById(int id);
     std:: string toSting();
 };
-extern FileManager* cli;
+
 #endif //VIDEOLOCADORA_CLIENTE_H

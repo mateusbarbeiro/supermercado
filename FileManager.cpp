@@ -1,31 +1,23 @@
-#include <iostream>
 #include "FileManager.h"
 
-FileManager *FileManager::carregaArquivoNaMemoria() {
-    std::ifstream ifs(fileName);
-    std::string line;
+void FileManager::carregarDados() {
+    FILE *arq;
+    char Linha[100];
+    char *result;
 
-    while(std::getline(ifs, line))
+    arq = fopen(nomeArquivo, "r+t");
+
+    if (arq == nullptr)
     {
-        this->listaLinhas->push_back(line);
+        printf("Problemas na abertura do arquivo\n");
+        return;
     }
-    ifs.close();
-    return this;
-}
 
-FileManager *FileManager::atualizaArquivo() {
-    std::ofstream out(fileName);
-    for (std::string linha : *listaLinhas) {
-        out << linha;
+    while (!feof(arq))
+    {
+        result = fgets(Linha, 100, arq);
+        // if (result)
+            // listaLinhas->push_back(result);
     }
-    out.close();
-    return this;
+    fclose(arq);
 }
-
-FileManager *FileManager::escreveLinha(std::string linha) {
-    this->listaLinhas->push_back(linha);
-    this->atualizaArquivo();
-    return this;
-}
-
-

@@ -1,7 +1,6 @@
 #include <iostream>
-#include <windows.h>
 #include <memory>
-//#include <algorithm>
+#include <fstream>
 #include "Cliente.h"
 #include "MenuOpcoes.h"
 
@@ -52,21 +51,29 @@ char Cliente::opcoesMenuCliente() {
 }
 
 void Cliente::cadastrarCliente() {
+    fstream fio; // cria objeto de leitura e gravação
+    fio.open("a:clientes.dat", ios::ate | ios::out | ios::in);
     Cliente cliente;
     do {
         std::cout << "Digite Nome do Cliente" << std::endl;
         std::getline(std::cin, cliente.nome);
     } while (sizeof(cliente.nome) <= 3);
-    cli->escreveLinha(cliente.toSting());
+
+    fio.write((char *)&cliente, sizeof(Cliente));
 }
 
 void Cliente::visualizarCliente() {
     std::cout << "Lista de Clientes\n" << std::endl;
-//    for (auto &itemLista: listaClientes) {
-//        std::cout << "Id: " << itemLista.id << std::endl;
-//        std::cout << "Nome: " << itemLista.nome << std::endl;
-//        std::cout << "Sexo: " << itemLista.sexo << "\n" << std::endl;
-//    }
+    fstream fio;
+    Cliente cliente;
+    fio.open("a:clientes.dat", ios::ate | ios::out | ios::in);
+    fio.seekg(0);
+    while (fio.read((char *)&cliente, sizeof(Cliente))) {
+        std::cout << "Id: " << cliente.id << std::endl;
+        std::cout << "Nome: " << cliente.nome << std::endl;
+    }
+
+    fio.close();
 }
 
 void Cliente::deletarCliente() {

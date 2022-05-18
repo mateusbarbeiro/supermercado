@@ -1,24 +1,25 @@
 #ifndef SUPERMERCADO_FILEMANAGER_H
 #define SUPERMERCADO_FILEMANAGER_H
-#include <iostream>
-#include <fstream>
+
+#include <string>
+#include <stdio.h>
+#include <conio.h>
 #include <list>
+#include <string.h>
 
 class FileManager {
 private:
-    char* fileName;
-    std::list<std::string>* listaLinhas;
+    char* nomeArquivo;
+    std::list<char[100]>* listaLinhas;
+
+    void carregarDados();
+
 
 public:
-    FileManager(char* fileName) {
-        this->fileName = fileName;
+    FileManager(char* nome) {
+        this->nomeArquivo = nome;
+        carregarDados();
     };
-
-    FileManager * carregaArquivoNaMemoria();
-    FileManager * atualizaArquivo();
-    FileManager * escreveLinha(std::string linha);
-
 };
-
 
 #endif //SUPERMERCADO_FILEMANAGER_H
