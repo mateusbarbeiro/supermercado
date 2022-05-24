@@ -2,6 +2,7 @@
 #include <iostream>
 #include "MenuOpcoes.h"
 #include "Cliente.h"
+#include "Produto.h"
 
 char MenuPrincipal::opcoes() {
     char opcao;
@@ -16,8 +17,8 @@ char MenuPrincipal::opcoes() {
                 break;
             case '2':
                 system("cls");
-                MenuDefault::menuGenericOpcoes("Filmes");
-//                opcao = Filme::opcoesMenuFilme();
+                MenuDefault::menuGenericOpcoes("Produtos");
+                opcao = Produto::opcoesMenuProduto();;
                 break;
             case '3':
                 system("cls");

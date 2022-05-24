@@ -52,7 +52,7 @@ char Cliente::opcoesMenuCliente() {
 
 void Cliente::cadastrarCliente() {
     FILE *fio;
-    fio = fopen("clientes.bin","ab");
+    fio = fopen("clientes.bin", "ab");
     Cliente cliente;
 
     std::string id;
@@ -69,7 +69,7 @@ void Cliente::cadastrarCliente() {
 void Cliente::visualizarCliente() {
     std::cout << "Lista de Clientes\n" << std::endl;
     FILE *fio;
-    fio = fopen("clientes.bin","rb");
+    fio = fopen("clientes.bin", "rb");
     Cliente cliente;
 
     fseek(fio, 0, SEEK_SET);
@@ -77,7 +77,7 @@ void Cliente::visualizarCliente() {
     while (true) {
         fread(&cliente, sizeof(cliente), 1, fio);
 
-        if(feof(fio)){
+        if (feof(fio)) {
             break;
         }
 
@@ -122,15 +122,15 @@ Cliente Cliente::getClienteById(int id) {
     FILE *fio;
     Cliente cliente;
 
-    fio = fopen("clientes.bin","rb");
+    fio = fopen("clientes.bin", "rb");
     fseek(fio, 0, SEEK_SET);
 
-    while (true){
+    while (true) {
         fread(&cliente, sizeof(cliente), 1, fio);
-        if (feof(fio)){
+        if (feof(fio)) {
             break;
         }
-        if (cliente.getIdCliente() == id){
+        if (cliente.getIdCliente() == id) {
             fclose(fio);
             return cliente;
         }
@@ -156,14 +156,14 @@ void Cliente::recriaArquivo(Cliente clienteIn, bool isAlteracao) {
     FILE *fio;
     FILE *fioTemp;
 
-    fio = fopen("clientes.bin","rb");
-    fioTemp = fopen("temp.bin","ab");
+    fio = fopen("clientes.bin", "rb");
+    fioTemp = fopen("temp.bin", "ab");
 
     Cliente clienteArq;
     while (true) {
         fread(&clienteArq, sizeof(Cliente), 1, fio);
 
-        if(feof(fio)){
+        if (feof(fio)) {
             break;
         }
 

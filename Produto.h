@@ -2,24 +2,42 @@
 #define SUPERMERCADO_PRODUTO_H
 
 #include <string>
+#include <cstring>
+
 
 class Produto {
 private:
     int id;
-    std::string nome;
-    double valor;
-    int quantidade;
+    char nome[50];
+    float preco;
 public:
-    explicit Produto() {}
+    explicit Produto() {};
+
+    inline bool operator==(const Produto &outro) const {
+        return outro.id == this->id;
+    }
 
     std::string getNomeProduto();
+
+    int getIdProduto();
+
     static char opcoesMenuProduto();
-    static Produto cadastrarProduto();
+
+    static void cadastrarProduto();
+
     static void alterarProduto();
+
     static void deletarProduto();
+
     static void visualizarProduto();
-    static Produto *getProdutoById();
-    static Produto *getProdutoById(int id);
+
+    static Produto getProdutoById();
+
+    static Produto getProdutoById(int id);
+
+    std::string toSting();
+
+    static void recriaArquivo(Produto produtoIn, bool isAlteracao);
 };
 
 
