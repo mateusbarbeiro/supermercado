@@ -6,7 +6,7 @@
 class Cliente{
 private:
     int id;
-    std::string nome;
+    char nome[50];
     float valor;
 
 public:
@@ -20,7 +20,7 @@ public:
     }
 
     std::string getNomeCliente();
-    int getIdCliente();
+    int getIdCliente() const;
     static char opcoesMenuCliente();
     static void cadastrarCliente();
     static void alterarCliente();

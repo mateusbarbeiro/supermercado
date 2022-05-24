@@ -1,7 +1,6 @@
 #include <iostream>
 #include <memory>
-#include <fstream>
-#include <cstdio>
+#include <stdio.h>
 #include "Cliente.h"
 #include "MenuOpcoes.h"
 
@@ -55,17 +54,15 @@ void Cliente::cadastrarCliente() {
     FILE *fio;
     fio = fopen("clientes.bin","ab");
     Cliente cliente;
-    do {
-        std::string id;
-        std::cout << "Id do Cliente" << std::endl;
-        std::getline(std::cin, id);
-        cliente.id = std::stoi(id);
 
-        std::cout << "Digite Nome do Cliente" << std::endl;
-        std::getline(std::cin, cliente.nome);
-    } while (sizeof(cliente.nome) <= 3);
+    std::string id;
+    std::cout << "Id do Cliente" << std::endl;
+    std::getline(std::cin, id);
+    cliente.id = std::stoi(id);
+    std::cout << "Digite Nome do Cliente" << std::endl;
+    scanf("%s", &cliente.nome);
 
-    fwrite(&cliente, sizeof(Cliente), 1, fio);
+    fwrite(&cliente, sizeof(cliente), 1, fio);
     fclose(fio);
 }
 
@@ -74,8 +71,11 @@ void Cliente::visualizarCliente() {
     FILE *fio;
     fio = fopen("clientes.bin","rb");
     Cliente cliente;
+
+    fseek(fio, 0, SEEK_SET);
+
     while (true) {
-        fread(&cliente, sizeof(Cliente), 1, fio);
+        fread(&cliente, sizeof(cliente), 1, fio);
 
         if(feof(fio)){
             break;
@@ -93,22 +93,21 @@ void Cliente::deletarCliente() {
     int id;
     std::cout << "Informe o id do Cliente que deseja Apagar" << std::endl;
     std::cin >> id;
-    Cliente cli = getClienteById(id);
+    Cliente cli = getClienteById();
 
     recriaArquivo(cli, false);
 }
 
 void Cliente::alterarCliente() {
     visualizarCliente();
-    int id;
+    Cliente updatedCli;
+    Cliente cli = getClienteById();
 
-    std::cout << "Informe o Id do Cliente que deseja alterar" << std::endl;
-    cin >> id;
-    Cliente cli = getClienteById(id);
+    updatedCli.id = cli.id;
     std::cout << "Digite Nome do Cliente" << std::endl;
-    std::cin >> cli.nome;
+    scanf("%s", &updatedCli.nome);
 
-    recriaArquivo(cli, true);
+    recriaArquivo(updatedCli, true);
 }
 
 Cliente Cliente::getClienteById() {
@@ -120,14 +119,24 @@ Cliente Cliente::getClienteById() {
 }
 
 Cliente Cliente::getClienteById(int id) {
-    fstream fio;
+    FILE *fio;
     Cliente cliente;
-    fio.open("a:clientes.bin", ios::ate | ios::out | ios::in);
-    fio.seekg(0);
-    while (fio.read((char *)&cliente, sizeof(Cliente))) {
-        return cliente;
+
+    fio = fopen("clientes.bin","rb");
+    fseek(fio, 0, SEEK_SET);
+
+    while (true){
+        fread(&cliente, sizeof(cliente), 1, fio);
+        if (feof(fio)){
+            break;
+        }
+        if (cliente.getIdCliente() == id){
+            fclose(fio);
+            return cliente;
+        }
     }
-    fio.close();
+
+    fclose(fio);
     return cliente;
 }
 
@@ -139,38 +148,37 @@ std::string Cliente::toSting() {
     return to_string(this->id) + "," + this->nome + ',' + to_string(this->valor);
 }
 
-int Cliente::getIdCliente() {
+int Cliente::getIdCliente() const {
     return this->id;
 }
 
 void Cliente::recriaArquivo(Cliente clienteIn, bool isAlteracao) {
     FILE *fio;
-    fio = fopen("clientes.bin","r+b");
-
     FILE *fioTemp;
-    fioTemp = fopen("temp.bin","wb");
 
-    fopen("clientes.bin", "r+b");
-    fopen("temp.bin", "r+b");
+    fio = fopen("clientes.bin","rb");
+    fioTemp = fopen("temp.bin","ab");
 
     Cliente clienteArq;
     while (true) {
-
         fread(&clienteArq, sizeof(Cliente), 1, fio);
-        if (clienteArq.getIdCliente() == clienteIn.getIdCliente()) {
-            if (isAlteracao) {
-                fwrite(&clienteIn, sizeof(Cliente), 1, fioTemp);
-            }
-        } else {
-            fwrite(&clienteArq, sizeof(Cliente), 1, fioTemp);
-        }
+
         if(feof(fio)){
             break;
+        }
+
+        if (clienteArq.getIdCliente() == clienteIn.getIdCliente()) {
+            if (isAlteracao) {
+                fwrite(&clienteIn, sizeof(clienteIn), 1, fioTemp);
+            }
+        } else {
+            fwrite(&clienteArq, sizeof(clienteArq), 1, fioTemp);
         }
     }
 
     fclose(fioTemp);
     fclose(fio);
+    remove("clientes.bin");
     rename("temp.bin", "clientes.bin");
 }
 
