@@ -1,6 +1,7 @@
 #include <iostream>
 #include <memory>
 #include <fstream>
+#include <cstdio>
 #include "Cliente.h"
 #include "MenuOpcoes.h"
 
@@ -51,29 +52,40 @@ char Cliente::opcoesMenuCliente() {
 }
 
 void Cliente::cadastrarCliente() {
-    fstream fio; // cria objeto de leitura e gravação
-    fio.open("a:clientes.dat", ios::ate | ios::out | ios::in);
+    FILE *fio;
+    fio = fopen("clientes.bin","ab");
     Cliente cliente;
     do {
+        std::string id;
+        std::cout << "Id do Cliente" << std::endl;
+        std::getline(std::cin, id);
+        cliente.id = std::stoi(id);
+
         std::cout << "Digite Nome do Cliente" << std::endl;
         std::getline(std::cin, cliente.nome);
     } while (sizeof(cliente.nome) <= 3);
 
-    fio.write((char *)&cliente, sizeof(Cliente));
+    fwrite(&cliente, sizeof(Cliente), 1, fio);
+    fclose(fio);
 }
 
 void Cliente::visualizarCliente() {
     std::cout << "Lista de Clientes\n" << std::endl;
-    fstream fio;
+    FILE *fio;
+    fio = fopen("clientes.bin","rb");
     Cliente cliente;
-    fio.open("a:clientes.dat", ios::ate | ios::out | ios::in);
-    fio.seekg(0);
-    while (fio.read((char *)&cliente, sizeof(Cliente))) {
+    while (true) {
+        fread(&cliente, sizeof(Cliente), 1, fio);
+
+        if(feof(fio)){
+            break;
+        }
+
         std::cout << "Id: " << cliente.id << std::endl;
         std::cout << "Nome: " << cliente.nome << std::endl;
-    }
 
-    fio.close();
+    }
+    fclose(fio);
 }
 
 void Cliente::deletarCliente() {
@@ -81,7 +93,9 @@ void Cliente::deletarCliente() {
     int id;
     std::cout << "Informe o id do Cliente que deseja Apagar" << std::endl;
     std::cin >> id;
-//    listaClientes.erase(std::remove(listaClientes.begin(), listaClientes.end(), Cliente(id)));
+    Cliente cli = getClienteById(id);
+
+    recriaArquivo(cli, false);
 }
 
 void Cliente::alterarCliente() {
@@ -90,18 +104,14 @@ void Cliente::alterarCliente() {
 
     std::cout << "Informe o Id do Cliente que deseja alterar" << std::endl;
     cin >> id;
+    Cliente cli = getClienteById(id);
+    std::cout << "Digite Nome do Cliente" << std::endl;
+    std::cin >> cli.nome;
 
-//    for (auto &itemLista: listaClientes) {
-//        if (itemLista.id == id) {
-//            std::cout << "Digite Nome do Cliente" << std::endl;
-//            std::cin >> itemLista.nome;
-//            std::cout << "Digite o Sexo - F ou M" << std::endl;
-//            std::cin >> itemLista.sexo;
-//        }
-//    }
+    recriaArquivo(cli, true);
 }
 
-Cliente *Cliente::getClienteById() {
+Cliente Cliente::getClienteById() {
     int id;
     std::cout << "Selecione o Id do Cliente: " << std::endl;
     std::cin >> id;
@@ -109,13 +119,16 @@ Cliente *Cliente::getClienteById() {
     return getClienteById(id);
 }
 
-Cliente *Cliente::getClienteById(int id) {
-    std::list<Cliente>::iterator it;
-//    it = std::find(listaClientes.begin(), listaClientes.end(), Cliente(id));
-//    if (it != listaClientes.end())
-//        return &*it;
-//    else
-//        throw std::invalid_argument( "Cliente não encontrado." );
+Cliente Cliente::getClienteById(int id) {
+    fstream fio;
+    Cliente cliente;
+    fio.open("a:clientes.bin", ios::ate | ios::out | ios::in);
+    fio.seekg(0);
+    while (fio.read((char *)&cliente, sizeof(Cliente))) {
+        return cliente;
+    }
+    fio.close();
+    return cliente;
 }
 
 std::string Cliente::getNomeCliente() {
@@ -124,5 +137,40 @@ std::string Cliente::getNomeCliente() {
 
 std::string Cliente::toSting() {
     return to_string(this->id) + "," + this->nome + ',' + to_string(this->valor);
+}
+
+int Cliente::getIdCliente() {
+    return this->id;
+}
+
+void Cliente::recriaArquivo(Cliente clienteIn, bool isAlteracao) {
+    FILE *fio;
+    fio = fopen("clientes.bin","r+b");
+
+    FILE *fioTemp;
+    fioTemp = fopen("temp.bin","wb");
+
+    fopen("clientes.bin", "r+b");
+    fopen("temp.bin", "r+b");
+
+    Cliente clienteArq;
+    while (true) {
+
+        fread(&clienteArq, sizeof(Cliente), 1, fio);
+        if (clienteArq.getIdCliente() == clienteIn.getIdCliente()) {
+            if (isAlteracao) {
+                fwrite(&clienteIn, sizeof(Cliente), 1, fioTemp);
+            }
+        } else {
+            fwrite(&clienteArq, sizeof(Cliente), 1, fioTemp);
+        }
+        if(feof(fio)){
+            break;
+        }
+    }
+
+    fclose(fioTemp);
+    fclose(fio);
+    rename("temp.bin", "clientes.bin");
 }
 
