@@ -83,6 +83,7 @@ void Cliente::visualizarCliente() {
 
         std::cout << "Id: " << cliente.id << std::endl;
         std::cout << "Nome: " << cliente.nome << std::endl;
+        std::cout << "Total ja gasto: " << cliente.valor << std::endl;
 
     }
     fclose(fio);
@@ -90,9 +91,6 @@ void Cliente::visualizarCliente() {
 
 void Cliente::deletarCliente() {
     visualizarCliente();
-    int id;
-    std::cout << "Informe o id do Cliente que deseja Apagar" << std::endl;
-    std::cin >> id;
     Cliente cli = getClienteById();
 
     recriaArquivo(cli, false);
@@ -100,11 +98,16 @@ void Cliente::deletarCliente() {
 
 void Cliente::alterarCliente() {
     visualizarCliente();
-    Cliente updatedCli;
     Cliente cli = getClienteById();
 
-    updatedCli.id = cli.id;
-    std::cout << "Digite Nome do Cliente" << std::endl;
+    alterarCliente(cli.id);
+}
+
+void Cliente::alterarCliente(int id) {
+    Cliente updatedCli;
+
+    updatedCli.id = id;
+    std::cout << "Digite novo nome do Cliente" << std::endl;
     scanf("%s", &updatedCli.nome);
 
     recriaArquivo(updatedCli, true);
@@ -180,5 +183,10 @@ void Cliente::recriaArquivo(Cliente clienteIn, bool isAlteracao) {
     fclose(fio);
     remove("clientes.bin");
     rename("temp.bin", "clientes.bin");
+}
+
+void Cliente::realizaCompra(float valorGasto) {
+    this->valor += valorGasto;
+    recriaArquivo(*this, true);
 }
 

@@ -8,7 +8,7 @@ class Cliente {
 private:
     int id;
     char nome[50];
-    float valor;
+    float valor = 0.0;
 
 public:
     explicit Cliente() {
@@ -40,6 +40,10 @@ public:
     std::string toSting();
 
     static void recriaArquivo(Cliente clienteIn, bool isAlteracao);
+
+    static void alterarCliente(int id);
+
+    void realizaCompra(float valorGasto);
 };
 
 #endif //VIDEOLOCADORA_CLIENTE_H

@@ -54,21 +54,23 @@ void Produto::cadastrarProduto() {
     FILE *fio;
     fio = fopen("produtos.bin", "ab");
     Produto produto;
-    do {
-        std::string id;
-        std::cout << "Id do Produto" << std::endl;
-        std::getline(std::cin, id);
-        produto.id = std::stoi(id);
 
-        std::cout << "Digite Nome do Produto" << std::endl;
-        scanf("%s", &produto.nome);
-
-    } while (sizeof(produto.nome) <= 3);
+    std::string id;
+    std::cout << "Id do Produto" << std::endl;
+    std::getline(std::cin, id);
+    produto.id = std::stoi(id);
+    std::cout << "Digite Nome do Produto" << std::endl;
+    scanf("%s", &produto.nome);
 
     do {
         std::cout << "Digite Preco do Produto" << std::endl;
         std::cin >> produto.preco;
     } while (produto.preco <= 0);
+
+    do {
+        std::cout << "Digite Quantidade do Produto" << std::endl;
+        std::cin >> produto.quantidade;
+    } while (produto.quantidade <= 0);
 
     fwrite(&produto, sizeof(Produto), 1, fio);
     fclose(fio);
@@ -89,6 +91,7 @@ void Produto::visualizarProduto() {
         std::cout << "Id: " << produto.id << std::endl;
         std::cout << "Nome: " << produto.nome << std::endl;
         std::cout << "Preco: " << produto.preco << std::endl;
+        std::cout << "Quantidade: " << produto.quantidade << std::endl;
     }
     fclose(fio);
 }
@@ -113,6 +116,9 @@ void Produto::alterarProduto() {
     scanf("%s", &updatedProd.nome);
     std::cout << "Digite Preco do Produto" << std::endl;
     std::cin >> updatedProd.preco;
+    std::cout << "Digite Quantidade do Produto" << std::endl;
+    std::cin >> updatedProd.quantidade;
+
     recriaArquivo(updatedProd, true);
 }
 
@@ -148,6 +154,10 @@ Produto Produto::getProdutoById(int id) {
 
 std::string Produto::getNomeProduto() {
     return nome;
+}
+
+float Produto::getPrecoProduto() {
+    return preco;
 }
 
 std::string Produto::toSting() {
@@ -186,5 +196,10 @@ void Produto::recriaArquivo(Produto produtoIn, bool isAlteracao) {
     fclose(fio);
     remove("produtos.bin");
     rename("temp.bin", "produtos.bin");
+}
+
+void Produto::realizaSaida(int quantidade) {
+    this->quantidade -= quantidade;
+    recriaArquivo(*this, true);
 }
 

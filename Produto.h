@@ -10,6 +10,7 @@ private:
     int id;
     char nome[50];
     float preco;
+    int quantidade;
 public:
     explicit Produto() {};
 
@@ -38,6 +39,10 @@ public:
     std::string toSting();
 
     static void recriaArquivo(Produto produtoIn, bool isAlteracao);
+
+    float getPrecoProduto();
+
+    void realizaSaida(int quantidade);
 };
 
 

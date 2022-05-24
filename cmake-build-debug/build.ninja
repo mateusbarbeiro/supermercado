@@ -79,8 +79,8 @@ build CMakeFiles/supermercado.dir/Produto.cpp.obj: CXX_COMPILER__supermercado_De
   OBJECT_DIR = CMakeFiles\supermercado.dir
   OBJECT_FILE_DIR = CMakeFiles\supermercado.dir
 
-build CMakeFiles/supermercado.dir/FileManager.cpp.obj: CXX_COMPILER__supermercado_Debug D$:/Projects/supermercado/FileManager.cpp || cmake_object_order_depends_target_supermercado
-  DEP_FILE = CMakeFiles\supermercado.dir\FileManager.cpp.obj.d
+build CMakeFiles/supermercado.dir/Venda.cpp.obj: CXX_COMPILER__supermercado_Debug D$:/Projects/supermercado/Venda.cpp || cmake_object_order_depends_target_supermercado
+  DEP_FILE = CMakeFiles\supermercado.dir\Venda.cpp.obj.d
   FLAGS = -g -std=gnu++14
   OBJECT_DIR = CMakeFiles\supermercado.dir
   OBJECT_FILE_DIR = CMakeFiles\supermercado.dir
@@ -93,7 +93,7 @@ build CMakeFiles/supermercado.dir/FileManager.cpp.obj: CXX_COMPILER__supermercad
 #############################################
 # Link the executable supermercado.exe
 
-build supermercado.exe: CXX_EXECUTABLE_LINKER__supermercado_Debug CMakeFiles/supermercado.dir/main.cpp.obj CMakeFiles/supermercado.dir/Cliente.cpp.obj CMakeFiles/supermercado.dir/MenuOpcoes.cpp.obj CMakeFiles/supermercado.dir/MenuPrincipal.cpp.obj CMakeFiles/supermercado.dir/Produto.cpp.obj CMakeFiles/supermercado.dir/FileManager.cpp.obj
+build supermercado.exe: CXX_EXECUTABLE_LINKER__supermercado_Debug CMakeFiles/supermercado.dir/main.cpp.obj CMakeFiles/supermercado.dir/Cliente.cpp.obj CMakeFiles/supermercado.dir/MenuOpcoes.cpp.obj CMakeFiles/supermercado.dir/MenuPrincipal.cpp.obj CMakeFiles/supermercado.dir/Produto.cpp.obj CMakeFiles/supermercado.dir/Venda.cpp.obj
   FLAGS = -g
   LINK_LIBRARIES = -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\supermercado.dir

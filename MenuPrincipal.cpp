@@ -3,6 +3,7 @@
 #include "MenuOpcoes.h"
 #include "Cliente.h"
 #include "Produto.h"
+#include "Venda.h"
 
 char MenuPrincipal::opcoes() {
     char opcao;
@@ -23,7 +24,7 @@ char MenuPrincipal::opcoes() {
             case '3':
                 system("cls");
                 MenuDefault::menuVenda();
-//                opcao = Locado::opcoesMenuLocado();
+                opcao = Venda::opcoesMenuVenda();
                 break;
             case '4':
                 return opcao;

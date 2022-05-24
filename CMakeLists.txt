@@ -3,4 +3,4 @@ project(supermercado)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(supermercado main.cpp Cliente.cpp MenuOpcoes.cpp MenuPrincipal.cpp Produto.cpp FileManager.cpp FileManager.h)
+add_executable(supermercado main.cpp Cliente.cpp MenuOpcoes.cpp MenuPrincipal.cpp Produto.cpp Venda.cpp)
